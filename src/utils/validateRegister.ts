@@ -2,7 +2,7 @@ import { RegisterInput } from "../resolvers/RegisterInput";
 
 export const validateregister = (options: RegisterInput) => {
 
-    if (options.email.includes("@")) {
+    if (!options.email.includes("@")) {
         return [
             {
                field: 'email',

@@ -4,6 +4,8 @@ import {ApolloServer} from 'apollo-server-express';
 import {buildSchema} from 'type-graphql';
 import {HelloResolver} from './resolvers/hello';
 import {UserResolver} from './resolvers/user';
+import {HeizungResolver} from './resolvers/Heizkostenabrechnung';
+import { AbrechnungsResolver} from './resolvers/AbrechnungsResolver'
 import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
@@ -11,6 +13,13 @@ import {COOKIE_NAME, __prod__} from "./constants";
 import cors from 'cors';
 import {createConnection} from 'typeorm';
 import { User } from "./entities/User";
+import { Heizkostenabrechnung } from "./entities/Heizkostenabrechnung";
+import { Einzelabrechnung } from "./entities/Einzelabrechnung";
+import { Abrechnung } from "./entities/Abrechnung";
+import { BewohnerBetriebskosten } from "./entities/BewohnerBetriebskosten";
+
+
+
 
 const main = async () => {
    const connection = await createConnection({
@@ -20,8 +29,9 @@ const main = async () => {
         password: 'M1988t1983#',
         logging: true,
         synchronize: true, // without  migration
-        entities: [User]
+        entities: [User, Heizkostenabrechnung, Einzelabrechnung, BewohnerBetriebskosten, Abrechnung]
     });
+
     const app = express();
     app.use(
         cors({
@@ -55,7 +65,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-                resolvers: [HelloResolver , UserResolver],
+                resolvers: [HelloResolver , UserResolver, HeizungResolver, AbrechnungsResolver],
                 validate: false,
             }),
         context: ({req, res}) => ({ req, res, connection, redis}),
@@ -66,6 +76,7 @@ const main = async () => {
         cors:  false,// {origin: "http://localhost:3000"} , 
     });
 
+    
     app.listen(4000, () => {
         console.log("server started on local host:4000");
     });
