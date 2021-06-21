@@ -26,7 +26,7 @@ const main = async () => {
         type: 'postgres',
         database: 'BetriebskostenabrechnungssystemDB',
         username: 'postgres',
-        password: 'M1988t1983#',
+        password: '124567893#',
         logging: true,
         synchronize: true, // without  migration
         entities: [User, Heizkostenabrechnung, Einzelabrechnung, BewohnerBetriebskosten, Abrechnung]
